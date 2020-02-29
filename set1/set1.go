@@ -4,7 +4,6 @@ package set1
 
 import (
 	"bytes"
-	"crypto/cipher"
 	"math"
 	"math/bits"
 )
@@ -138,51 +137,4 @@ func hammingDist(as, bs []byte) int {
 		dist += bits.OnesCount8(a ^ bs[i])
 	}
 	return dist
-}
-
-type ecb struct {
-	b cipher.Block
-}
-
-type ecbEncrypter ecb
-type ecbDecrypter ecb
-
-func newECBDecrypter(b cipher.Block) cipher.BlockMode {
-	return &ecbDecrypter{b: b}
-}
-
-func (x *ecbDecrypter) BlockSize() int {
-	return x.b.BlockSize()
-}
-
-func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
-	if len(dst) < len(src) {
-		panic("dst < src")
-	}
-	if len(src)%x.BlockSize() != 0 {
-		panic("src not a multiple of blocksize")
-	}
-	for i := 0; i < len(src); i += x.BlockSize() {
-		x.b.Decrypt(dst[i:], src[i:])
-	}
-}
-
-func newECBEncrypter(b cipher.Block) cipher.BlockMode {
-	return &ecbEncrypter{b: b}
-}
-
-func (x *ecbEncrypter) BlockSize() int {
-	return x.b.BlockSize()
-}
-
-func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
-	if len(dst) < len(src) {
-		panic("dst < src")
-	}
-	if len(src)%x.BlockSize() != 0 {
-		panic("src not a multiple of blocksize")
-	}
-	for i := 0; i < len(src); i += x.BlockSize() {
-		x.b.Encrypt(dst[i:], src[i:])
-	}
 }

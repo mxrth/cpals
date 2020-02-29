@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/drak3/cpals/crypto/cipher"
 	"github.com/drak3/cpals/encoding"
 	"github.com/drak3/cpals/file"
 )
@@ -106,7 +107,7 @@ func TestChallenge007(t *testing.T) {
 	key := []byte("YELLOW SUBMARINE")
 
 	c, _ := aes.NewCipher(key)
-	crypter := newECBDecrypter(c)
+	crypter := cipher.NewECBDecrypter(c)
 	plain := make([]byte, len(ciph))
 	crypter.CryptBlocks(plain, ciph)
 	//t.Log(string(plain))
@@ -119,8 +120,8 @@ func TestECB(t *testing.T) {
 	copy(orig, r)
 	key := []byte("YELLOW SUBMARINE")
 	c, _ := aes.NewCipher(key)
-	dec := newECBDecrypter(c)
-	enc := newECBEncrypter(c)
+	dec := cipher.NewECBDecrypter(c)
+	enc := cipher.NewECBEncrypter(c)
 	enc.CryptBlocks(r, r)
 
 	if bytes.Equal(r, orig) {
