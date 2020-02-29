@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/rand"
+	"encoding/base64"
 	"io/ioutil"
 	"testing"
 )
@@ -28,8 +29,8 @@ func TestPKCS7(t *testing.T) {
 }
 
 func TestChallenge010(t *testing.T) {
-	s, _ := ioutil.ReadFile("data/10.txt")
-	b, _ := base64ToBytes(string(s))
+	s, _ := ioutil.ReadFile("testdata/10.txt")
+	b, _ := base64.StdEncoding.DecodeString(string(s))
 	//b = padPKCS7(b, aes.BlockSize)
 	key := []byte("YELLOW SUBMARINE")
 	block, _ := aes.NewCipher(key)

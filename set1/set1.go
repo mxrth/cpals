@@ -1,55 +1,15 @@
-//Package cpals implements solutions for the cryptopals challenges. See https://cryptopals.com for infos.
-//
-//The file setXX.go contains most of the code needed to complete the corresponding set, while the corresponding setXX_test.go
-//contains the solutions for specific inputs
-//
-//Run "go test" to test all sets, add the "-v" flag to see additional info on the solutions. To run a specific challenge XXX do go test -run XXX
-package cpals
+//Package set1 implements solutions for the cryptopals challenges, Set 1. See https://cryptopals.com for infos.
+//TODO: document running tests
+package set1
 
 import (
 	"bufio"
 	"bytes"
 	"crypto/cipher"
-	"encoding/base64"
-	"encoding/hex"
-	"fmt"
 	"math"
 	"math/bits"
 	"os"
 )
-
-func hexToBytes(s string) ([]byte, error) {
-	return hex.DecodeString(s)
-}
-
-func bytesToHex(b []byte) string {
-	return hex.EncodeToString(b)
-}
-
-func base64ToBytes(s string) ([]byte, error) {
-	return base64.StdEncoding.DecodeString(s)
-}
-
-func bytesToBase64(b []byte) string {
-	return base64.StdEncoding.EncodeToString(b)
-}
-
-func hexToBase64(s string) (string, error) {
-	b, err := hexToBytes(s)
-	if err != nil {
-		return "", fmt.Errorf("invalid hex")
-	}
-	return bytesToBase64(b), nil
-
-}
-
-func base64ToHex(s string) (string, error) {
-	b, err := base64ToBytes(s)
-	if err != nil {
-		return "", fmt.Errorf("invalid hex")
-	}
-	return bytesToHex(b), nil
-}
 
 func bytewiseXOR(a, b []byte) []byte {
 	if len(a) != len(b) {

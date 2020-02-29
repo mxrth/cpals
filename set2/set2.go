@@ -107,9 +107,9 @@ func (x *decryptCBC) CryptBlocks(dst []byte, src []byte) {
 	}
 }
 
-func encryptionOracle(in []byte) (out []byte, ecb bool) {
-	//ecb = rand.
-}
+// func encryptionOracle(in []byte) (out []byte, ecb bool) {
+// 	//ecb = rand.
+// }
 
 func randBool() bool {
 	b := make([]byte, 1)

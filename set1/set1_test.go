@@ -1,17 +1,22 @@
-package cpals
+package set1
 
 import (
 	"bytes"
 	"crypto/aes"
 	"crypto/rand"
+	"encoding/base64"
+	"encoding/hex"
 	"io/ioutil"
 	"testing"
+
+	"github.com/drak3/cpals/encoding"
+	"github.com/drak3/cpals/file"
 )
 
 func TestChallenge001(t *testing.T) {
 	var haveHex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
 	var wantBase = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
-	gotBase, err := hexToBase64(haveHex)
+	gotBase, err := encoding.HexToBase64(haveHex)
 	if err != nil {
 		t.Error(err)
 	}
@@ -21,9 +26,9 @@ func TestChallenge001(t *testing.T) {
 }
 
 func TestChallenge002(t *testing.T) {
-	a, err := hexToBytes("1c0111001f010100061a024b53535009181c")
-	b, err := hexToBytes("686974207468652062756c6c277320657965")
-	want, err := hexToBytes("746865206b696420646f6e277420706c6179")
+	a, err := hex.DecodeString("1c0111001f010100061a024b53535009181c")
+	b, err := hex.DecodeString("686974207468652062756c6c277320657965")
+	want, err := hex.DecodeString("746865206b696420646f6e277420706c6179")
 	if err != nil {
 		t.Errorf("wut?")
 	}
@@ -34,7 +39,7 @@ func TestChallenge002(t *testing.T) {
 }
 
 func TestChallenge003(t *testing.T) {
-	c, _ := hexToBytes("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
+	c, _ := hex.DecodeString("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
 	k, s := breakSingleByteXOR(c)
 	t.Logf("Found key %d (%c) with score %f\n", k, k, s)
 	t.Logf("decrypts to: \"%s\"\n", singleByteXOR(c, 'X'))
@@ -44,10 +49,10 @@ func TestChallenge003(t *testing.T) {
 }
 
 func TestChallenge004(t *testing.T) {
-	lines := readLines("data/4.txt")
+	lines := file.ReadLines("testdata/4.txt")
 	bestLine, key, maxScore := 0, byte(0), 0.0
 	for i, line := range lines {
-		l, err := hexToBytes(line)
+		l, err := hex.DecodeString(line)
 		if err != nil {
 			t.Fail()
 		}
@@ -60,7 +65,7 @@ func TestChallenge004(t *testing.T) {
 	}
 	t.Log(maxScore)
 	t.Logf("Best line is line no. %d, key=%d (%c)\n", bestLine, key, key)
-	l, _ := hexToBytes(lines[bestLine])
+	l, _ := hex.DecodeString(lines[bestLine])
 	t.Logf("It decrypts to %s\n", string(singleByteXOR(l, key)))
 	if bestLine != 170 {
 		t.Errorf("Got wrong line %d, expected 170", bestLine)
@@ -73,7 +78,7 @@ func TestChallenge004(t *testing.T) {
 func TestChallenge005(t *testing.T) {
 	plain := "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
 	c := multibyteXOR([]byte(plain), []byte("ICE"))
-	want, _ := hexToBytes("0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f")
+	want, _ := hex.DecodeString("0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f")
 	if !bytes.Equal(c, want) {
 		t.Errorf("Failed multibyteXOR encryption")
 	}
@@ -84,8 +89,8 @@ func TestChallenge006(t *testing.T) {
 	if dist != 37 {
 		t.Errorf("Expected Hamming distance 37, got %d", dist)
 	}
-	base, _ := ioutil.ReadFile("data/6.txt")
-	cipher, _ := base64ToBytes(string(base))
+	base, _ := ioutil.ReadFile("testdata/6.txt")
+	cipher, _ := base64.StdEncoding.DecodeString(string(base))
 	t.Log(len(cipher))
 	key := breakMultibyteXOR(cipher)
 
@@ -96,8 +101,8 @@ func TestChallenge006(t *testing.T) {
 }
 
 func TestChallenge007(t *testing.T) {
-	bs, _ := ioutil.ReadFile("data/7.txt")
-	ciph, _ := base64ToBytes(string(bs))
+	bs, _ := ioutil.ReadFile("testdata/7.txt")
+	ciph, _ := base64.StdEncoding.DecodeString(string(bs))
 	key := []byte("YELLOW SUBMARINE")
 
 	c, _ := aes.NewCipher(key)
@@ -130,7 +135,7 @@ func TestECB(t *testing.T) {
 }
 
 func TestChallenge008(t *testing.T) {
-	lines := readLines("data/8.txt")
+	lines := readLines("testdata/8.txt")
 
 loop:
 	for i, l := range lines {
@@ -138,7 +143,7 @@ loop:
 		// roughly (numBlocks^2)/2^(8*aes.BlockSize) the numerator comes out as 2^128 so whenever we find two blocks that are the same we can be virtually certain
 		// that ECB-Mode was used
 		// detection is done in the naive O(n^2) way: iterate over the blocks twice and compare
-		c, _ := hexToBytes(l)
+		c, _ := hex.DecodeString(l)
 
 		for j := 0; j < len(c)/aes.BlockSize; j++ {
 			for k := j + 1; k < len(c)/aes.BlockSize; k++ {
