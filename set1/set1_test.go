@@ -135,7 +135,7 @@ func TestECB(t *testing.T) {
 }
 
 func TestChallenge008(t *testing.T) {
-	lines := readLines("testdata/8.txt")
+	lines := file.ReadLines("testdata/8.txt")
 
 loop:
 	for i, l := range lines {

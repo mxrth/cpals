@@ -3,12 +3,10 @@
 package set1
 
 import (
-	"bufio"
 	"bytes"
 	"crypto/cipher"
 	"math"
 	"math/bits"
-	"os"
 )
 
 func bytewiseXOR(a, b []byte) []byte {
@@ -187,22 +185,4 @@ func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
 	for i := 0; i < len(src); i += x.BlockSize() {
 		x.b.Encrypt(dst[i:], src[i:])
 	}
-}
-
-func readLines(fileName string) (lines []string) {
-	f, err := os.Open(fileName)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	scanner := bufio.NewScanner(f)
-	i := 0
-	for scanner.Scan() {
-		bs := scanner.Bytes()
-		lines = append(lines, string(bs))
-		i++
-	}
-	//fmt.Print(len(lines))
-	return
 }
