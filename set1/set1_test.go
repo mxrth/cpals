@@ -8,9 +8,9 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/drak3/cpals/crypto/cipher"
-	"github.com/drak3/cpals/encoding"
-	"github.com/drak3/cpals/file"
+	"github.com/mxrth/cpals/crypto/cipher"
+	"github.com/mxrth/cpals/encoding"
+	"github.com/mxrth/cpals/file"
 )
 
 func TestChallenge001(t *testing.T) {

@@ -3,8 +3,9 @@ package cipher
 import (
 	"bytes"
 	"crypto/aes"
-	"crypto/rand"
 	"testing"
+
+	"github.com/mxrth/cpals/crypto/rand"
 )
 
 func TestECB(t *testing.T) {

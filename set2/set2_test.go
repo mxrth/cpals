@@ -1,4 +1,4 @@
-package cpals
+package set2
 
 import (
 	"bytes"
@@ -8,8 +8,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/drak3/cpals/crypto"
-	"github.com/drak3/cpals/crypto/cipher"
+	"github.com/mxrth/cpals/crypto"
+	"github.com/mxrth/cpals/crypto/cipher"
 )
 
 func TestChallenge009(t *testing.T) {
