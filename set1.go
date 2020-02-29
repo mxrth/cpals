@@ -204,9 +204,13 @@ func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
 	if len(src)%x.BlockSize() != 0 {
 		panic("src not a multiple of blocksize")
 	}
-	for i := 0; i < len(src)/x.BlockSize(); i++ {
-		x.b.Decrypt(dst[i*x.BlockSize():(i+1)*x.BlockSize()], src[i*x.BlockSize():(i+1)*x.BlockSize()])
+	for i := 0; i < len(src); i += x.BlockSize() {
+		x.b.Decrypt(dst[i:], src[i:])
 	}
+}
+
+func newECBEncrypter(b cipher.Block) cipher.BlockMode {
+	return &ecbEncrypter{b: b}
 }
 
 func (x *ecbEncrypter) BlockSize() int {
@@ -220,8 +224,8 @@ func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
 	if len(src)%x.BlockSize() != 0 {
 		panic("src not a multiple of blocksize")
 	}
-	for i := 0; i < len(src)/x.BlockSize(); i++ {
-		x.b.Encrypt(dst[i*x.BlockSize():(i+1)*x.BlockSize()], src[i*x.BlockSize():(i+1)*x.BlockSize()])
+	for i := 0; i < len(src); i += x.BlockSize() {
+		x.b.Encrypt(dst[i:], src[i:])
 	}
 }
 

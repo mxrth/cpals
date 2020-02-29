@@ -3,6 +3,7 @@ package cpals
 import (
 	"bytes"
 	"crypto/aes"
+	"crypto/rand"
 	"io/ioutil"
 	"testing"
 )
@@ -104,6 +105,28 @@ func TestChallenge007(t *testing.T) {
 	plain := make([]byte, len(ciph))
 	crypter.CryptBlocks(plain, ciph)
 	//t.Log(string(plain))
+}
+
+func TestECB(t *testing.T) {
+	r := make([]byte, 100*aes.BlockSize)
+	orig := make([]byte, len(r))
+	rand.Read(r)
+	copy(orig, r)
+	key := []byte("YELLOW SUBMARINE")
+	c, _ := aes.NewCipher(key)
+	dec := newECBDecrypter(c)
+	enc := newECBEncrypter(c)
+	enc.CryptBlocks(r, r)
+
+	if bytes.Equal(r, orig) {
+		t.Error("enc = id (probability of fluke is really low)")
+	}
+
+	dec.CryptBlocks(r, r)
+	if !bytes.Equal(r, orig) {
+		t.Error("dec enc != id")
+	}
+
 }
 
 func TestChallenge008(t *testing.T) {
