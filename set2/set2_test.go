@@ -3,10 +3,13 @@ package cpals
 import (
 	"bytes"
 	"crypto/aes"
+
 	"crypto/rand"
 	"encoding/base64"
 	"io/ioutil"
 	"testing"
+
+	"github.com/drak3/cpals/crypto/cipher"
 )
 
 func TestChallenge009(t *testing.T) {
@@ -37,7 +40,7 @@ func TestChallenge010(t *testing.T) {
 
 	iv := bytes.Repeat([]byte{0}, block.BlockSize())
 
-	decrypter := newCBCDecrypter(block, iv)
+	decrypter := cipher.NewCBCDecrypter(block, iv)
 	decrypter.CryptBlocks(b, b)
 	t.Log(string(b))
 }
@@ -54,8 +57,8 @@ func TestCBCMode(t *testing.T) {
 
 	block, _ := aes.NewCipher(key)
 
-	encrypter := newCBCEncrypter(block, iv)
-	decrypter := newCBCDecrypter(block, iv)
+	encrypter := cipher.NewCBCEncrypter(block, iv)
+	decrypter := cipher.NewCBCDecrypter(block, iv)
 
 	encrypter.CryptBlocks(plain, plain)
 
