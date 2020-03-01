@@ -34,3 +34,11 @@ func TestChallenge010(t *testing.T) {
 	decrypter.CryptBlocks(b, b)
 	t.Log(string(b))
 }
+
+func TestChallenge011(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		if !playChallenge011() {
+			t.Error("Lost Challenge 11")
+		}
+	}
+}
