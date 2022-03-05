@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/mxrth/cpals/crypto"
+	"github.com/mxrth/cpals/crypto/analysis"
 	"github.com/mxrth/cpals/set8"
 )
 
@@ -31,7 +33,7 @@ func TestChallenge002(t *testing.T) {
 	public := new(big.Int).Exp(g, secret, p)
 
 	//Bob is the curried DHBob which only takes a public param h and then outputs a tag
-	bob := set8.Bob(func(h *big.Int) ([]byte, set8.Tag) {
+	bob := analysis.Bob(func(h *big.Int) ([]byte, crypto.Tag) {
 		return set8.DHBob(p, secret, h)
 	})
 
@@ -47,8 +49,8 @@ func TestChallenge002(t *testing.T) {
 	}
 }
 
-func breakDH(p, g, q, j, public *big.Int, bob set8.Bob) *big.Int {
-	n, r := set8.DHSmallSubgroupAttack(p, g, q, j, bob)
+func breakDH(p, g, q, j, public *big.Int, bob analysis.Bob) *big.Int {
+	n, r := analysis.DHSmallSubgroupAttack(p, g, q, j, bob)
 	fmt.Println("done smallsubgroupattack")
 
 	gPrime := new(big.Int).Exp(g, r, p)
@@ -57,7 +59,7 @@ func breakDH(p, g, q, j, public *big.Int, bob set8.Bob) *big.Int {
 	upper := new(big.Int).Sub(q, big.NewInt(1))
 	upper.Div(upper, r)
 
-	m := set8.Kangaroo(p, q, j, gPrime, yPrime, big.NewInt(0), upper)
+	m := analysis.Kangaroo(p, q, j, gPrime, yPrime, big.NewInt(0), upper)
 	m.Mul(m, r)
 	m.Add(m, n)
 	return m
@@ -67,7 +69,7 @@ func testKangaroo(y *big.Int) {
 	start := time.Now()
 	a := new(big.Int)
 	b := new(big.Int).Exp(big.NewInt(2), big.NewInt(40), nil)
-	result := set8.Kangaroo(p, q, j, g, y, a, b)
+	result := analysis.Kangaroo(p, q, j, g, y, a, b)
 	fmt.Println(result)
 	tmp := new(big.Int)
 

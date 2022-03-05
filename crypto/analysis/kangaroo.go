@@ -1,4 +1,4 @@
-package set8
+package analysis
 
 import (
 	"fmt"

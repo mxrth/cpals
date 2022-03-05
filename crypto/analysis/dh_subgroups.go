@@ -1,15 +1,16 @@
-package set8
+package analysis
 
 import (
 	"fmt"
 	"math/big"
 	"math/rand"
 
+	"github.com/mxrth/cpals/crypto"
 	"github.com/mxrth/cpals/numt"
 )
 
 //Bob is given alice's PK, calculates shared secret and computes tag of a fixed message
-type Bob func(h *big.Int) ([]byte, Tag)
+type Bob func(h *big.Int) ([]byte, crypto.Tag)
 
 //DHSmallSubgroupAttack small subgroup confinement attack
 //Given the public params p,g,q,j and a function Bob that simulates a (honest) DH-party,
@@ -40,7 +41,7 @@ func DHSmallSubgroupAttack(p, g, q, j *big.Int, bob Bob) (x, r *big.Int) {
 			k := new(big.Int).Exp(h, b, p)
 			//fmt.Println("K Candidate")
 			//fmt.Println(k)
-			if VerifyMAC(k, m, t) {
+			if crypto.VerifyMAC(k, m, t) {
 				//fmt.Println("found valid k")
 				break
 			}

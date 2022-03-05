@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"testing"
 
+	"github.com/mxrth/cpals/crypto"
+	"github.com/mxrth/cpals/crypto/analysis"
 	"github.com/mxrth/cpals/set8"
 )
 
@@ -25,11 +27,11 @@ func TestChallenge001(t *testing.T) {
 	secret.Add(secret, one)
 
 	//Bob is the curried DHBob which only takes a public param h and then outputs a tag
-	bob := set8.Bob(func(h *big.Int) ([]byte, set8.Tag) {
+	bob := analysis.Bob(func(h *big.Int) ([]byte, crypto.Tag) {
 		return set8.DHBob(p, secret, h)
 	})
 
-	guess, _ := set8.DHSmallSubgroupAttack(p, g, q, j, bob) //Let's break it
+	guess, _ := analysis.DHSmallSubgroupAttack(p, g, q, j, bob) //Let's break it
 
 	t.Logf("guess : %v\n", guess)
 	t.Logf("secret: %v\n", secret)

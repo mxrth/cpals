@@ -1,4 +1,4 @@
-package set8
+package analysis
 
 import (
 	"fmt"
@@ -6,12 +6,13 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/mxrth/cpals/crypto"
 	"github.com/mxrth/cpals/crypto/ec"
 	"github.com/mxrth/cpals/numt"
 )
 
 //ECBob simulates one endpoint of a DH key exchange
-type ECBob func(h ec.Point) ([]byte, Tag)
+type ECBob func(h ec.Point) ([]byte, crypto.Tag)
 
 //ECDHInvalidPointsAttack carries out attack...
 //c: Curve we operate on
@@ -56,7 +57,7 @@ func ECDHInvalidPointsAttack(curve ec.Curve, base ec.Point, bob ECBob) *big.Int 
 			for ; l.Cmp(r) != 0; l.Add(l, one) {
 				k := curve.Scale(p, l).X
 				//normalize(k, curve.P)
-				if VerifyMAC(k, m, t) {
+				if crypto.VerifyMAC(k, m, t) {
 					fmt.Printf("found valid k l:%v\n", l)
 					break
 				}
