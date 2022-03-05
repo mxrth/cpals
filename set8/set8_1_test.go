@@ -1,12 +1,9 @@
 package set8
 
 import (
-	"fmt"
 	"math/big"
 	"math/rand"
 	"testing"
-
-	"github.com/mxrth/cpals/encoding"
 )
 
 //public params p,g,q and j are set in params.go
@@ -32,22 +29,13 @@ func TestChallenge001(t *testing.T) {
 
 	guess, _ := DHSmallSubgroupAttack(p, g, q, j, bob) //Let's break it
 
-	fmt.Println(guess)
-	fmt.Println(secret)
+	t.Logf("guess : %v\n", guess)
+	t.Logf("secret: %v\n", secret)
 
 	if guess.Cmp(secret) == 0 {
-		fmt.Println("SUCCESS!")
+		t.Log("SUCCESS!")
 	} else {
-		fmt.Println("FAILURE!")
-	}
-	var haveHex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
-	var wantBase = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
-	gotBase, err := encoding.HexToBase64(haveHex)
-	if err != nil {
-		t.Error(err)
-	}
-	if gotBase != wantBase {
-		t.Errorf("Wrong hex (%s) from base64", gotBase)
+		t.Errorf("FAILURE!")
 	}
 }
 
