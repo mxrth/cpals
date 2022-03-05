@@ -2,6 +2,8 @@ package file
 
 import (
 	"bufio"
+	"encoding/base64"
+	"io/ioutil"
 	"os"
 )
 
@@ -23,4 +25,17 @@ func ReadLines(fileName string) (lines []string) {
 	}
 	//fmt.Print(len(lines))
 	return
+}
+
+func ReadBase64File(f string) []byte {
+	b, ok := ioutil.ReadFile(os.Args[1])
+	if ok != nil {
+		panic("Could not read file")
+	}
+
+	c, ok := base64.StdEncoding.DecodeString(string(b))
+	if ok != nil {
+		panic("Invalid Base64")
+	}
+	return c
 }
