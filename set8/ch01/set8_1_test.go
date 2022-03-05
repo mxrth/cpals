@@ -4,6 +4,8 @@ import (
 	"math/big"
 	"math/rand"
 	"testing"
+
+	"github.com/mxrth/cpals/set8"
 )
 
 //public params p,g,q and j are set in params.go
@@ -23,11 +25,11 @@ func TestChallenge001(t *testing.T) {
 	secret.Add(secret, one)
 
 	//Bob is the curried DHBob which only takes a public param h and then outputs a tag
-	bob := Bob(func(h *big.Int) ([]byte, Tag) {
-		return DHBob(p, secret, h)
+	bob := set8.Bob(func(h *big.Int) ([]byte, set8.Tag) {
+		return set8.DHBob(p, secret, h)
 	})
 
-	guess, _ := DHSmallSubgroupAttack(p, g, q, j, bob) //Let's break it
+	guess, _ := set8.DHSmallSubgroupAttack(p, g, q, j, bob) //Let's break it
 
 	t.Logf("guess : %v\n", guess)
 	t.Logf("secret: %v\n", secret)
