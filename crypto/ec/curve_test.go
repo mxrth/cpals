@@ -1,7 +1,6 @@
 package ec
 
 import (
-	"fmt"
 	"math/big"
 	"testing"
 )
@@ -98,7 +97,7 @@ func TestAdd(t *testing.T) {
 		t.Errorf("Double trouble")
 	}
 
-	fmt.Println(res3)
+	//fmt.Println(res3)
 
 	if !Equal(res3, O) {
 		t.Errorf("Scaling doesn't check out")

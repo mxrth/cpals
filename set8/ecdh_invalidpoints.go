@@ -1,4 +1,4 @@
-package analysis
+package set8
 
 import (
 	"fmt"
@@ -39,9 +39,9 @@ func ECDHInvalidPointsAttack(curve ec.Curve, base ec.Point, bob ECBob) *big.Int 
 
 	for i, b := range Bs {
 		primes := numt.SmallFactors(orders[i], upper)
-		fmt.Println(primes)
+		//fmt.Println(primes)
 		c := ec.Curve{A: A, B: b, P: curve.P}
-		fmt.Println(c)
+		//fmt.Println(c)
 		for _, r := range primes {
 			if contains(factors, r) {
 				continue
@@ -58,7 +58,7 @@ func ECDHInvalidPointsAttack(curve ec.Curve, base ec.Point, bob ECBob) *big.Int 
 				k := curve.Scale(p, l).X
 				//normalize(k, curve.P)
 				if crypto.VerifyMAC(k, m, t) {
-					fmt.Printf("found valid k l:%v\n", l)
+					//fmt.Printf("found valid k l:%v\n", l)
 					break
 				}
 			}
@@ -70,7 +70,7 @@ func ECDHInvalidPointsAttack(curve ec.Curve, base ec.Point, bob ECBob) *big.Int 
 			residues = append(residues, cpy)
 		}
 	}
-	fmt.Println(residues, factors)
+	//fmt.Println(residues, factors)
 	return numt.CRT(residues, factors)
 }
 
@@ -94,7 +94,7 @@ func randomPoint(c ec.Curve, curveOrder, pointOrder *big.Int) ec.Point {
 		}
 		p = c.Scale(ec.Point{X: x, Y: y}, j)
 	}
-	fmt.Println(p)
+	//fmt.Println(p)
 	if !ec.Equal(c.Scale(p, pointOrder), ec.O) {
 		panic("LOGIC ERROR")
 	}

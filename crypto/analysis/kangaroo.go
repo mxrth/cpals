@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"fmt"
 	"math/big"
 )
 
@@ -32,7 +31,7 @@ func Kangaroo(p, q, j, g, y, a, b *big.Int) *big.Int {
 		yT.Mul(yT, tmp).Mod(yT, p)
 	}
 
-	fmt.Println("Tame sequence Done")
+	//fmt.Println("Tame sequence Done")
 
 	//xW := 0
 	xW := new(big.Int)

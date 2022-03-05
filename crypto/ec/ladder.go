@@ -1,7 +1,6 @@
 package ec
 
 import (
-	"fmt"
 	"math/big"
 )
 
@@ -30,7 +29,7 @@ func (c MCurve) Ladder(u, k *big.Int) *big.Int {
 	for i := c.P.BitLen() - 1; i >= 0; i-- {
 		//b := 1 & (k >> i)
 		b := k.Bit(i)
-		fmt.Printf("i = %v, b = %v\n", i, b)
+		//fmt.Printf("i = %v, b = %v\n", i, b)
 		//u2, u3 := cswap(u2, u3, b)
 		u2, u3 = cswap(u2, u3, b)
 		//w2, w3 := cswap(w2, w3, b)
@@ -91,7 +90,7 @@ func (c MCurve) Ladder(u, k *big.Int) *big.Int {
 		u2, u3 = cswap(u2, u3, b)
 		//w2, w3 := cswap(w2, w3, b)
 		w2, w3 = cswap(w2, w3, b)
-		fmt.Printf("u2 = %v, u3 = %v\nw2 = %v, w3 = %v\n\n", u2, u3, w2, w3)
+		//fmt.Printf("u2 = %v, u3 = %v\nw2 = %v, w3 = %v\n\n", u2, u3, w2, w3)
 	}
 
 	//return u2 * w2^(p-2)
